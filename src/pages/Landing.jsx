@@ -19,13 +19,20 @@ function Landing() {
     const [lat, setLat] = useState(42.35);
     const [zoom, setZoom] = useState(9);
 
+  // // Adjust map size on render
+  // map.on('render', function () {
+  //   map.resize();
+  // });
+    
   useEffect(() => {
+
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
       zoom: zoom
     });
+
 
     // Change Lat, Lng on move
     map.on('move', () => {
@@ -55,9 +62,9 @@ function Landing() {
   }, []);
 
   return (
-    <div>
+    <div className="map-container">
       Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      <div className="map-container" ref={mapContainer}/>
+      <div id="map" ref={mapContainer}/>
     </div>
   )
 }
