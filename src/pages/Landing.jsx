@@ -18,21 +18,34 @@ function Landing() {
     const [lng, setLng] = useState(-70.9);
     const [lat, setLat] = useState(42.35);
     const [zoom, setZoom] = useState(9);
-
-  // // Adjust map size on render
-  // map.on('render', function () {
-  //   map.resize();
-  // });
     
   useEffect(() => {
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: "mapbox://styles/charlesong/clajdaze2000e14qpshcv9szq",
       center: [lng, lat],
       zoom: zoom
     });
 
+    // Popups on marker click
+    map.on('click', (event) => {
+      // If the user clicked on one of your markers, get its information.
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: ["free-parking-perth"]
+      });
+      if (!features.length) {
+        return;
+      }
+      const feature = features[0];
+    
+      const popup = new mapboxgl.Popup({ offset: [0, -15] })
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(
+          `<h3>${feature.properties.Name}</h3><p>${feature.properties.City}</p><p>${feature.properties.Suburb}</p>`
+        )
+        .addTo(map);
+    });
 
     // Change Lat, Lng on move
     map.on('move', () => {
