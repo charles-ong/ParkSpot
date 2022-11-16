@@ -14,10 +14,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 function Landing() {
 
   const mapContainer = useRef(null)
-    const map = useRef(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
-    const [zoom, setZoom] = useState(9);
+  const [lng, setLng] = useState(-70.9);
+  const [lat, setLat] = useState(42.35);
+  const [zoom, setZoom] = useState(9);
     
   useEffect(() => {
 
@@ -42,7 +41,7 @@ function Landing() {
       const popup = new mapboxgl.Popup({ offset: [0, -15] })
         .setLngLat(feature.geometry.coordinates)
         .setHTML(
-          `<h3>${feature.properties.Name}</h3><p>${feature.properties.City}</p><p>${feature.properties.Suburb}</p>`
+          `<h3>${feature.properties.Name}</h3><p>${feature.properties.Suburb}, ${feature.properties.City}</p>`
         )
         .addTo(map);
     });
