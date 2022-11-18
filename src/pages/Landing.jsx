@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA';
 
 // Components
+import UserMarkerSubmission from "../components/UserMarkerSubmission"
 
 // CSS
 import "./styles/Landing.css"
@@ -14,9 +15,10 @@ import "mapbox-gl/dist/mapbox-gl.css";
 function Landing() {
 
   const mapContainer = useRef(null)
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
+  const [lng, setLng] = useState(115.8613);
+  const [lat, setLat] = useState(-31.9523);
   const [zoom, setZoom] = useState(9);
+  const [markerLngLat, setMarkerLngLat] = useState(null);
 
   const [userMarker, setUserMarker] = useState(false);
     
@@ -128,7 +130,20 @@ function Landing() {
                 color: "#FF0000"
               }).setLngLat([newLng, newLat]).addTo(map);
             
+            
+            function onDragEnd() {
+              const lngLat = marker.getLngLat();
+              console.log(marker.getLngLat());
+              const latLng = marker.getLngLat();
+              setMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
+            }
+            
+            marker.on('dragend', onDragEnd);
+            
             setUserMarker(true);
+
+            const latLng = marker.getLngLat();
+            setMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
           }
         });
         return div;
@@ -146,8 +161,17 @@ function Landing() {
     <div className="map-container">
       <div id="map" ref={mapContainer}/>
     </div>
-    <div className="map-overlay">
-    <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p>
+    <div className="map-overlay-container">
+      <div className="top-2 left-2">
+        <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p>
+      </div>
+    </div>
+    <div className="user-submission-buttons">
+      <UserMarkerSubmission
+        show = {userMarker}
+        onHide ={() => setUserMarker(false)}
+        lngLat = {markerLngLat}
+      />
     </div>
     </>
   )
