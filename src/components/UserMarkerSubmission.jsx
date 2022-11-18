@@ -45,11 +45,11 @@ function UserMarkerSubmission(props){
                     >
                         <Form.Group className="mb-3">
                             <Form.Label>Coordinates</Form.Label>
-                            <Form.Control placeholder="Disabled input" disabled value={props.lngLat}/>
+                            <Form.Control placeholder="Disabled input" disabled name="ParkSpot Marker Submission" value={props.lngLat}/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" />
+                        <Form.Control type="email" placeholder="Enter email" name="ParkSpot Marker Submission"/>
                         <Form.Text className="text-muted">
                         We'll never share your email with anyone else.
                         </Form.Text>
