@@ -46,11 +46,19 @@ function Landing() {
         .addTo(map);
     });
 
+    // Temporary variables to enable immediate updating of values
+    var newLng = lng;
+    var newLat = lat;
+    var newZoom = zoom;
+
     // Change Lat, Lng on move
     map.on('move', () => {
-      setLng(map.getCenter().lng.toFixed(4));
-      setLat(map.getCenter().lat.toFixed(4));
-      setZoom(map.getZoom().toFixed(2));
+      newLng = map.getCenter().lng.toFixed(4);
+      newLat = map.getCenter().lat.toFixed(4);
+      newZoom = map.getZoom().toFixed(2);
+      setLng(newLng);
+      setLat(newLat);
+      setZoom(newZoom);
     });
 
     // Fullscreen control
@@ -105,34 +113,27 @@ function Landing() {
         div.addEventListener("click", function(){
           const marker = new mapboxgl.Marker({
               draggable: "true"
-            }).setLngLat([lng, lat]).addTo(map);
+            }).setLngLat([newLng, newLat]).addTo(map);
         });
         return div;
       }
       onRemove(map) {}
     }
     map.addControl(new AddMarkerButton());
-      
-    class DeveloperDebug {
-      onAdd(map) {
-        const div = document.createElement("div");
-        div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-        div.innerHTML = `<p>Longitude:` + lng +` Latitude: `+lat+` Zoom: `+zoom+`</p>`;
-        div.addEventListener("contextmenu", (e) => e.preventDefault());
-        return div;
-      }
-      onRemove(map) {}
-    }
-    map.addControl(new DeveloperDebug(), "bottom-left");
 
     // Clean up on unmount
     return () => map.remove();
   }, []);
 
   return (
+    <>
     <div className="map-container">
       <div id="map" ref={mapContainer}/>
     </div>
+    <div className="map-overlay">
+    <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p>
+    </div>
+    </>
   )
 }
   
