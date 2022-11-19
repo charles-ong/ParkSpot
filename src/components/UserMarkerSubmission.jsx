@@ -42,7 +42,6 @@ function UserMarkerSubmission(props){
                         data-netlify="true"
                         netlify 
                         netlify-honeypot="bot-field" 
-                        hidden
                         name="ParkSpot Marker Submission"
                         method="post"
                     >
