@@ -55,16 +55,18 @@ function UserMarkerSubmission(props){
                             We'll never share your email with anyone else.
                             </p>
                         </div>
+                        
+                        <Modal.Footer>
+                            <Button variant="danger" onClick={handleClose}>
+                                Cancel
+                            </Button>
+                            <Button variant="primary" type="submit" onClick={handleClose}>
+                                Submit Suggestion
+                            </Button>
+                        </Modal.Footer>
                     </form>
                 </Modal.Body>
-                <Modal.Footer>
-                <Button variant="danger" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button variant="primary" type="submit" onClick={handleClose}>
-                    Submit Suggestion
-                </Button>
-                </Modal.Footer>
+                
             </Modal>
             </>
         )
