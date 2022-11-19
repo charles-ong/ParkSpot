@@ -39,14 +39,16 @@ function UserMarkerSubmission(props){
                 <Modal.Body>
                     <Image fluid src={source}/>
                     <form 
-                        netlify
                         data-netlify="true"
+                        netlify 
+                        netlify-honeypot="bot-field" 
+                        hidden
                         name="ParkSpot Marker Submission"
                         method="post"
                     >
                         <div className="mb-3 mt-3">
                             <label>Coordinates </label>
-                            <input placeholder="Disabled input" disabled name="coordinates" value={props.lngLat}/>
+                            <input type="text" placeholder="Disabled input" disabled name="coordinates" value={props.lngLat}/>
                         </div>
                         <div className="mb-3">
                             <label >Email address </label>
