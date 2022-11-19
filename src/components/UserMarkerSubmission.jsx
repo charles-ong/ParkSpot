@@ -39,17 +39,18 @@ function UserMarkerSubmission(props){
                 <Modal.Body>
                     <Image fluid src={source}/>
                     <form 
+                        netlify
                         data-netlify="true"
                         name="ParkSpot Marker Submission"
                         method="post"
                     >
                         <div className="mb-3 mt-3">
                             <label>Coordinates </label>
-                            <input placeholder="Disabled input" disabled name="Coordinates" value={props.lngLat}/>
+                            <input placeholder="Disabled input" disabled name="coordinates" value={props.lngLat}/>
                         </div>
                         <div className="mb-3">
                             <label >Email address </label>
-                            <input type="email" placeholder="Enter email" name="Email" required={true}/>
+                            <input type="email" placeholder="Enter email" name="email" required={true}/>
                             <p className="text-muted text-xs">
                             We'll never share your email with anyone else.
                             </p>
