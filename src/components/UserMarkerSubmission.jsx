@@ -46,17 +46,15 @@ function UserMarkerSubmission(props){
                         method="post"
                     >
                         <div className="mb-3 mt-3">
-                            <label>Coordinates </label>
-                            <input type="text" placeholder="Disabled input" disabled name="coordinates" value={props.lngLat}/>
-                        </div>
-                        <div className="mb-3">
-                            <label >Email address </label>
-                            <input type="email" placeholder="Enter email" name="email" required={true}/>
-                            <p className="text-muted text-xs">
-                            We'll never share your email with anyone else.
+                            <input type="hidden" name="form-name" value="ParkSpot Marker Submission" />
+                            <p>
+                                <label>Coordinates: <input type="text" placeholder="Disabled input" disabled name="coordinates" value={props.lngLat}/></label>
                             </p>
-                        </div>
-                        
+                            <p>
+                                <label>Your Email: <input type="email" name="email"/></label>
+                            </p>
+                            
+                        </div>          
                         <Modal.Footer>
                             <Button variant="danger" onClick={handleClose}>
                                 Cancel
