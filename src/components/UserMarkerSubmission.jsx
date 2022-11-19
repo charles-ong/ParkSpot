@@ -48,21 +48,23 @@ function UserMarkerSubmission(props){
                         <div className="mb-3 mt-3">
                             <input type="hidden" name="form-name" value="ParkSpot Marker Submission" />
                             <p>
-                                <label>Coordinates: <input type="text" placeholder="Disabled input" disabled name="coordinates" value={props.lngLat}/></label>
+                                <label>Coordinates: <input type="text" disabled name="coordinates" value={props.lngLat}/></label>
                             </p>
                             <p>
                                 <label>Your Email: <input type="email" name="email"/></label>
                             </p>
-                            
+                            <p>
+                                <button type="submit">Send</button>
+                            </p>
                         </div>          
-                        <Modal.Footer>
+                        {/* <Modal.Footer>
                             <Button variant="danger" onClick={handleClose}>
                                 Cancel
                             </Button>
                             <Button variant="primary" type="submit" onClick={handleClose}>
                                 Submit Suggestion
                             </Button>
-                        </Modal.Footer>
+                        </Modal.Footer> */}
                     </form>
                 </Modal.Body>
                 
