@@ -38,34 +38,32 @@ function UserMarkerSubmission(props){
                 </Modal.Header>
                 <Modal.Body>
                     <Image fluid src={source}/>
-                    <form 
-                        data-netlify="true"
-                        netlify 
-                        netlify-honeypot="bot-field" 
-                        name="ParkSpot Marker Submission"
-                        method="post"
-                    >
-                        <div className="mb-3 mt-3">
-                            <input type="hidden" name="form-name" value="ParkSpot Marker Submission" />
-                            <p>
-                                <label>Coordinates: <input type="text" disabled name="coordinates" value={props.lngLat}/></label>
-                            </p>
-                            <p>
-                                <label>Your Email: <input type="email" name="email"/></label>
-                            </p>
-                            <p>
-                                <button type="submit">Send</button>
-                            </p>
-                        </div>          
-                        {/* <Modal.Footer>
-                            <Button variant="danger" onClick={handleClose}>
+                    <div className="mb-3 mt-3">
+                        <form 
+                            name="markerSubmission"
+                            method="post"
+                        >
+                            <input type="hidden" name="form-name" value="markerSubmission" />
+                            
+                                <p>
+                                    <label>Coordinates: <input type="text" disabled name="coordinates" value={props.lngLat}/></label>
+                                </p>
+                                <p>
+                                    <label>Your Email: <input type="email" name="email"/></label>
+                                </p>
+                                <p>
+                                    <button type="submit">Send</button>
+                                </p>
+                            {/* <Modal.Footer>
+                                <Button variant="danger" onClick={handleClose}>
                                 Cancel
-                            </Button>
-                            <Button variant="primary" type="submit" onClick={handleClose}>
+                                </Button>
+                                <Button variant="primary" type="submit" onClick={handleClose}>
                                 Submit Suggestion
-                            </Button>
-                        </Modal.Footer> */}
-                    </form>
+                                </Button>
+                            </Modal.Footer> */}
+                        </form>
+                    </div>          
                 </Modal.Body>
                 
             </Modal>
