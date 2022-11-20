@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image'
+import emailjs from 'emailjs-com';
 
 function UserMarkerSubmission(props){
 
@@ -10,6 +11,21 @@ function UserMarkerSubmission(props){
     const handleShow = () => setShowModal(true)
     const handleClose = () => setShowModal(false);
     const source = "https://api.mapbox.com/styles/v1/charlesong/clajdaze2000e14qpshcv9szq/static/pin-m-circle+ff0000(" + props.lngLat + ")/auto/600x300@2x?attribution=true&logo=false&access_token=pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA";
+    const form = useRef();
+
+    const [email, setEmail] = useState(null);
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+        console.log(form.current);
+        emailjs.sendForm('service_le7cdeo', 'template_a1wcjvf', form.current, 'm5Hi3f20sfOb0duDs')
+          .then((result) => {
+              console.log(result.text);
+          }, (error) => {
+              console.log(error.text);
+          });
+        handleClose();
+    };
 
     function cancel() {
         const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
@@ -39,28 +55,21 @@ function UserMarkerSubmission(props){
                 <Modal.Body>
                     <Image fluid src={source}/>
                     <div className="mb-3 mt-3">
-                        <Form
-                            netlify
-                            name="markerSubmission"
-                            method="post"
-                        >
-                            <input type="hidden" name="form-name" value="markerSubmission"/>
-                            
-                            <Form.Group className="mb-3">
+                        <Form ref={form} onSubmit={sendEmail}>
+                            <Form.Group className="mb-3" controlId="coordinates">
                                 <Form.Label>Coordinates:</Form.Label>
-                                <Form.Control type="text" name="coordinates" value={props.lngLat} disabled/>
+                                <Form.Control type="text" name="coordinates" value={props.lngLat}/>
                             </Form.Group>
-                            <Form.Group className="mb-3">
+                            <Form.Group className="mb-3" controlId="email">
                                 <Form.Label>Your Email: </Form.Label>
-                                <Form.Control type="email" name="email"/>
+                                <Form.Control type="email" name="user_email"/>
                                 <Form.Text className="text-muted">
                                     We'll never share your email with anyone else.
                                 </Form.Text>
                             </Form.Group>
-                            <div data-netlify-recaptcha="true"></div>
                             <Modal.Footer>
                                 <Button variant="danger" onClick={handleClose}>
-                                Close
+                                Cancel
                                 </Button>
                                 <Button variant="primary" type="submit">
                                 Submit Suggestion
