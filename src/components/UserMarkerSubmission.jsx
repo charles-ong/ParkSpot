@@ -42,7 +42,6 @@ function UserMarkerSubmission(props){
                         <Form 
                             name="markerSubmission"
                             method="post"
-                            action=''
                         >
                             <input type="hidden" name="form-name" value="markerSubmission"/>
                             
