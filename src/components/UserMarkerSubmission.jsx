@@ -39,7 +39,8 @@ function UserMarkerSubmission(props){
                 <Modal.Body>
                     <Image fluid src={source}/>
                     <div className="mb-3 mt-3">
-                        <Form 
+                        <Form
+                            netlify
                             name="markerSubmission"
                             method="post"
                         >
@@ -59,9 +60,9 @@ function UserMarkerSubmission(props){
                             <div data-netlify-recaptcha="true"></div>
                             <Modal.Footer>
                                 <Button variant="danger" onClick={handleClose}>
-                                Cancel
+                                Close
                                 </Button>
-                                <Button variant="primary" type="submit" onClick={handleClose}>
+                                <Button variant="primary" type="submit">
                                 Submit Suggestion
                                 </Button>
                             </Modal.Footer>

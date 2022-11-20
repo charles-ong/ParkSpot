@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA';
 
@@ -9,7 +10,9 @@ import UserMarkerSubmission from "../components/UserMarkerSubmission"
 // CSS
 import "./styles/Landing.css"
 import "mapbox-gl/dist/mapbox-gl.css";
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 // import 'https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css'
+
 
 // Page Function
 function Landing() {
@@ -19,6 +22,7 @@ function Landing() {
   const [lat, setLat] = useState(-31.9523);
   const [zoom, setZoom] = useState(9);
   const [markerLngLat, setMarkerLngLat] = useState(null);
+  const [value, setValue] = useState("");
 
   const [userMarker, setUserMarker] = useState(false);
     
@@ -152,6 +156,16 @@ function Landing() {
     }
     map.addControl(new AddMarkerButton());
 
+    // Search Box (Mapbox Search JS)
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl,
+      countries: 'au',
+      bbox: [111.42, -35.93, 128.98, -12.91],
+      collapsed: true
+    });
+    map.addControl(geocoder, "top-left")
+
     // Clean up on unmount
     return () => map.remove();
   }, []);
@@ -164,6 +178,9 @@ function Landing() {
     <div className="map-overlay-container">
       <div className="top-2 left-2">
         {/* <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p> */}
+        {/* <form>
+          <SearchBox accessToken={mapboxgl.accessToken} />
+        </form> */}
       </div>
     </div>
     <div className="user-submission-buttons">
