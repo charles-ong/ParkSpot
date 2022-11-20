@@ -163,7 +163,7 @@ function Landing() {
     </div>
     <div className="map-overlay-container">
       <div className="top-2 left-2">
-        <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p>
+        {/* <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p> */}
       </div>
     </div>
     <div className="user-submission-buttons">

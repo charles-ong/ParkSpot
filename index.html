@@ -7,10 +7,15 @@
     <title>ParkSpot</title>
   </head>
   <body>
-    <form name="markerSubmission" netlify netlify-honeypot="bot-field" hidden>
+    <form 
+      name="markerSubmission"
+      netlify
+      netlify-honeypot="bot-field"
+      data-netlify-recaptcha="true"
+      hidden
+    >
       <input type="text" name="coordinates" />
       <input type="email" name="email" />
-      <textarea name="message"></textarea>
     </form>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

@@ -39,30 +39,34 @@ function UserMarkerSubmission(props){
                 <Modal.Body>
                     <Image fluid src={source}/>
                     <div className="mb-3 mt-3">
-                        <form 
+                        <Form 
                             name="markerSubmission"
                             method="post"
+                            action=''
                         >
-                            <input type="hidden" name="form-name" value="markerSubmission" />
+                            <input type="hidden" name="form-name" value="markerSubmission"/>
                             
-                                <p>
-                                    <label>Coordinates: <input type="text" disabled name="coordinates" value={props.lngLat}/></label>
-                                </p>
-                                <p>
-                                    <label>Your Email: <input type="email" name="email"/></label>
-                                </p>
-                                <p>
-                                    <button type="submit">Send</button>
-                                </p>
-                            {/* <Modal.Footer>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Coordinates:</Form.Label>
+                                <Form.Control type="text" name="coordinates" value={props.lngLat} disabled/>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Your Email: </Form.Label>
+                                <Form.Control type="email" name="email"/>
+                                <Form.Text className="text-muted">
+                                    We'll never share your email with anyone else.
+                                </Form.Text>
+                            </Form.Group>
+                            <div data-netlify-recaptcha="true"></div>
+                            <Modal.Footer>
                                 <Button variant="danger" onClick={handleClose}>
                                 Cancel
                                 </Button>
                                 <Button variant="primary" type="submit" onClick={handleClose}>
                                 Submit Suggestion
                                 </Button>
-                            </Modal.Footer> */}
-                        </form>
+                            </Modal.Footer>
+                        </Form>
                     </div>          
                 </Modal.Body>
                 
