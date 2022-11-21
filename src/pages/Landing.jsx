@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { Steps, Hints } from 'intro.js-react';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA';
 
@@ -11,21 +12,41 @@ import UserMarkerSubmission from "../components/UserMarkerSubmission"
 import "./styles/Landing.css"
 import "mapbox-gl/dist/mapbox-gl.css";
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import 'intro.js/introjs.css';
 // import 'https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css'
 
 
 // Page Function
 function Landing() {
 
-  const mapContainer = useRef(null)
+  const mapContainer = useRef(null);
   const [lng, setLng] = useState(115.8613);
   const [lat, setLat] = useState(-31.9523);
   const [zoom, setZoom] = useState(9);
   const [markerLngLat, setMarkerLngLat] = useState(null);
-  const [value, setValue] = useState("");
-
   const [userMarker, setUserMarker] = useState(false);
-    
+  
+  const [enableTour, setEnableTour] = useState(false);
+  const steps = [
+    {
+      element: '.body',
+      intro: 'Welcome to Parkspot. ',
+      position: 'right',
+      tooltipClass: 'myTooltipClass',
+      highlightClass: 'myHighlightClass',
+    },
+    {
+      element: '.mapboxgl-ctrl-top-right',
+      intro: 'This is the control panel.',
+    },
+    {
+      element: '.mapboxgl-ctrl-geocoder',
+      intro: 'This is the search panel.',
+    },
+  ];
+
+  const onExit = () => {};
+
   useEffect(() => {
 
     const map = new mapboxgl.Map({
@@ -166,6 +187,9 @@ function Landing() {
     });
     map.addControl(geocoder, "top-left")
 
+    // Enable the product tour after map has been loaded
+    setEnableTour(true);
+
     // Clean up on unmount
     return () => map.remove();
   }, []);
@@ -178,9 +202,13 @@ function Landing() {
     <div className="map-overlay-container">
       <div className="top-2 left-2">
         {/* <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p> */}
-        {/* <form>
-          <SearchBox accessToken={mapboxgl.accessToken} />
-        </form> */}
+        <Steps
+          enabled = {enableTour}
+          steps = {steps}
+          initialStep = {0}
+          onExit = {onExit}
+          onComplete = {()=>setEnableTour(false)}
+        />
       </div>
     </div>
     <div className="user-submission-buttons">
