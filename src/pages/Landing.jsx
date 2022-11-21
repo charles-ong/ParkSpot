@@ -207,7 +207,9 @@ function Landing() {
           steps = {steps}
           initialStep = {0}
           onExit = {onExit}
+          onBeforeExit = {()=>setEnableTour(false)}
           onComplete = {()=>setEnableTour(false)}
+          
         />
       </div>
     </div>
