@@ -30,18 +30,42 @@ function Landing() {
   const steps = [
     {
       element: '.body',
-      intro: 'Welcome to Parkspot. ',
+      intro: 'Welcome to Parkspot!',
       position: 'right',
       tooltipClass: 'myTooltipClass',
       highlightClass: 'myHighlightClass',
     },
     {
-      element: '.mapboxgl-ctrl-top-right',
-      intro: 'This is the control panel.',
+      element: '.mapboxgl-ctrl-fullscreen',
+      intro: 'Click this button to enter or exit fullscreen.',
+    },
+    {
+      element: '.mapboxgl-ctrl-zoom-in',
+      intro: 'Click this button or pinch outwards to zoom in.',
+    },
+    {
+      element: '.mapboxgl-ctrl-zoom-out',
+      intro: 'Click this button or pinch inwards to zoom out.',
+    },
+    {
+      element: '.mapboxgl-ctrl-compass',
+      intro: 'Click this button to reset the bearing to face north.',
+    },
+    {
+      element: '.mapboxgl-ctrl-geolocate',
+      intro: 'Click this button to view your current location.',
+    },
+    {
+      element: '.home-button',
+      intro: 'Click this button to reset the map view back to Perth.',
+    },
+    {
+      element: '.add-marker-button',
+      intro: "Found a free parking spot that's not on the map? Click this to help us add it to the map.",
     },
     {
       element: '.mapboxgl-ctrl-geocoder',
-      intro: 'This is the search panel.',
+      intro: 'This is the search bar. You can search for any place within Western Australia',
     },
   ];
 
@@ -121,7 +145,7 @@ function Landing() {
       onAdd(map) {
         const div = document.createElement("div");
         div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-        div.innerHTML = `<button>
+        div.innerHTML = `<button class="home-button">
           <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="font-size: 20px;"><title>Reset map</title><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
           </button>`;
         div.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -137,7 +161,7 @@ function Landing() {
       onAdd(map) {
         const div = document.createElement("div");
         div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-        div.innerHTML = `<button><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none"><title>Suggest Free Parking Spot</title><path fill="currentColor" fill-rule="evenodd" d="M11.291 21.706 12 21l-.709.706zM12 21l.708.706a1 1 0 0 1-1.417 0l-.006-.007-.017-.017-.062-.063a47.708 47.708 0 0 1-1.04-1.106 49.562 49.562 0 0 1-2.456-2.908c-.892-1.15-1.804-2.45-2.497-3.734C4.535 12.612 4 11.248 4 10c0-4.539 3.592-8 8-8 4.408 0 8 3.461 8 8 0 1.248-.535 2.612-1.213 3.87-.693 1.286-1.604 2.585-2.497 3.735a49.583 49.583 0 0 1-3.496 4.014l-.062.063-.017.017-.006.006L12 21zm0-8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" clip-rule="evenodd"/></svg></button>`;
+        div.innerHTML = `<button class="add-marker-button"><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none"><title>Suggest Free Parking Spot</title><path fill="currentColor" fill-rule="evenodd" d="M11.291 21.706 12 21l-.709.706zM12 21l.708.706a1 1 0 0 1-1.417 0l-.006-.007-.017-.017-.062-.063a47.708 47.708 0 0 1-1.04-1.106 49.562 49.562 0 0 1-2.456-2.908c-.892-1.15-1.804-2.45-2.497-3.734C4.535 12.612 4 11.248 4 10c0-4.539 3.592-8 8-8 4.408 0 8 3.461 8 8 0 1.248-.535 2.612-1.213 3.87-.693 1.286-1.604 2.585-2.497 3.735a49.583 49.583 0 0 1-3.496 4.014l-.062.063-.017.017-.006.006L12 21zm0-8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" clip-rule="evenodd"/></svg></button>`;
         div.addEventListener("contextmenu", (e) => e.preventDefault());
         div.addEventListener("click", function(){
           const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
