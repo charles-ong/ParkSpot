@@ -7,6 +7,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3Zyc
 
 // Components
 import UserMarkerSubmission from "../components/UserMarkerSubmission"
+import MarkerSideBar from '../components/MarkerSideBar';
 
 // CSS
 import "./styles/Landing.css"
@@ -25,6 +26,8 @@ function Landing() {
   const [zoom, setZoom] = useState(9);
   const [markerLngLat, setMarkerLngLat] = useState(null);
   const [userMarker, setUserMarker] = useState(false);
+  const [markerDetails, setMarkerDetails] = useState({});
+  const [sideBarShow, setSideBarShow] = useState(false);
   
   const [enableTour, setEnableTour] = useState(false);
   const steps = [
@@ -90,13 +93,21 @@ function Landing() {
         return;
       }
       const feature = features[0];
-    
-      const popup = new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML(
-          `<h3>${feature.properties.Name}</h3><p>${feature.properties.Suburb}, ${feature.properties.City}</p>`
-        )
-        .addTo(map);
+      
+      // const popup = new mapboxgl.Popup({ offset: [0, -15] })
+      //   .setLngLat(feature.geometry.coordinates)
+      //   .setHTML(
+      //     `<h3>${feature.properties.Name}</h3><p>${feature.properties.Suburb}, ${feature.properties.City}</p>`
+      //   )
+      //   .addTo(map);
+      
+      const details = {
+        Name: feature.properties.Name,
+        Suburb: feature.properties.Suburb,
+        City: feature.properties.City
+      };
+      setMarkerDetails(details);
+      setSideBarShow(true);
     });
 
     // Temporary variables to enable immediate updating of values
@@ -221,11 +232,18 @@ function Landing() {
   return (
     <>
     <div className="map-container">
-      <div id="map" ref={mapContainer}/>
+      <div id="map" ref={mapContainer}>
+      </div>
     </div>
     <div className="map-overlay-container">
       <div className="top-2 left-2">
         {/* <p>Longitude: {lng}, Latitude: {lat}, Zoom: {zoom}</p> */}
+        <MarkerSideBar
+          show = {sideBarShow}
+          details = {markerDetails}
+          onHide = {() => setSideBarShow(false)}
+        />
+
         <Steps
           enabled = {enableTour}
           steps = {steps}
@@ -233,14 +251,15 @@ function Landing() {
           onExit = {onExit}
           onBeforeExit = {()=>setEnableTour(false)}
           onComplete = {()=>setEnableTour(false)}
-          
         />
+
       </div>
     </div>
     <div className="user-submission-buttons">
+      
       <UserMarkerSubmission
         show = {userMarker}
-        onHide ={() => setUserMarker(false)}
+        onHide = {() => setUserMarker(false)}
         lngLat = {markerLngLat}
       />
     </div>
