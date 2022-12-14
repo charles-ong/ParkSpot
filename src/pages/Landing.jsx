@@ -24,7 +24,8 @@ function Landing() {
   const [lng, setLng] = useState(115.8613);
   const [lat, setLat] = useState(-31.9523);
   const [zoom, setZoom] = useState(9);
-  const [markerLngLat, setMarkerLngLat] = useState(null);
+  const [userMarkerLngLat, setUserMarkerLngLat] = useState(null);
+  const [markerLatLng, setMarkerLatLng] = useState(null);
   const [userMarker, setUserMarker] = useState(false);
   const [markerDetails, setMarkerDetails] = useState({});
   const [sideBarShow, setSideBarShow] = useState(false);
@@ -100,7 +101,10 @@ function Landing() {
       //     `<h3>${feature.properties.Name}</h3><p>${feature.properties.Suburb}, ${feature.properties.City}</p>`
       //   )
       //   .addTo(map);
-      
+
+      const coordinates = feature.geometry.coordinates;
+      setMarkerLatLng(coordinates[1] + "," + coordinates[0]);
+
       const details = {
         Name: feature.properties.Name,
         Suburb: feature.properties.Suburb,
@@ -195,7 +199,7 @@ function Landing() {
               const lngLat = marker.getLngLat();
               console.log(marker.getLngLat());
               const latLng = marker.getLngLat();
-              setMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
+              setUserMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
             }
             
             marker.on('dragend', onDragEnd);
@@ -203,7 +207,7 @@ function Landing() {
             setUserMarker(true);
 
             const latLng = marker.getLngLat();
-            setMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
+            setUserMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
           }
         });
         return div;
@@ -241,6 +245,7 @@ function Landing() {
         <MarkerSideBar
           show = {sideBarShow}
           details = {markerDetails}
+          latLng = {markerLatLng}
           onHide = {() => setSideBarShow(false)}
         />
 
@@ -260,7 +265,7 @@ function Landing() {
       <UserMarkerSubmission
         show = {userMarker}
         onHide = {() => setUserMarker(false)}
-        lngLat = {markerLngLat}
+        lngLat = {userMarkerLngLat}
       />
     </div>
     </>
