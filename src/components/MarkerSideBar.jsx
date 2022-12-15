@@ -12,9 +12,20 @@ function MarkerSideBar(props){
         placement = "bottom"
     }
 
+    function hide(){
+        const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
+          // Remove all added markers
+          if (markers.length > 0){
+            while(markers.length > 0){
+              markers[0].parentNode.removeChild(markers[0]);
+            }
+        }
+        props.onHide();
+    }
+
     return(
         <>
-        <Offcanvas show={props.show} onHide={props.onHide} backdrop={false} scroll={true} placement = {placement}>
+        <Offcanvas show={props.show} onHide={hide} backdrop={false} scroll={true} placement = {placement}>
             <Offcanvas.Header closeButton>
             <Offcanvas.Title>{props.details.Name}</Offcanvas.Title>
             </Offcanvas.Header>
