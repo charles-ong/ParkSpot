@@ -29,12 +29,14 @@ function UserMarkerSubmission(props){
 
     function cancel() {
         const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
-        // Remove all added markers
-        if (markers.length > 0){
-            while(markers.length > 0){
-                markers[0].parentNode.removeChild(markers[0]);
+          // Remove all added markers (except user location button)
+          if (markers.length > 0){
+            for (let i=0; i<markers.length; i++){
+              if (!markers[i].className.includes("location")){
+                markers[i].parentNode.removeChild(markers[i]);
+              }
             }
-        }
+          }
         props.onHide();
     }
 

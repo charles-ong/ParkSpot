@@ -116,6 +116,18 @@ function Landing() {
 
       map.panTo(feature.geometry.coordinates, {zoom: 17});
 
+      const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
+      // Remove all added markers (except user location button)
+      if (markers.length > 0){
+        for (let i=0; i<markers.length; i++){
+          if (!markers[i].className.includes("location")){
+            markers[i].parentNode.removeChild(markers[i]);
+          }
+        }
+      }
+
+      setUserMarker(false);
+
       const marker = new mapboxgl.Marker({
         scale: 0.8,
         color: "#FF0000"
@@ -131,6 +143,22 @@ function Landing() {
       };
       setMarkerDetails(details);
       setSideBarShow(true);
+    });
+
+    // Change cursor on hover
+    map.on("mouseenter ", "free-parking-perth", (event) => {
+      // const features = map.queryRenderedFeatures(event.point, {
+      //   layers: ["free-parking-perth", "heatmap"]
+      // });
+      // if (!features.length) {
+      //   return;
+      // }
+      // const feature = features[0];
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', "free-parking-perth", (event) => {
+      map.getCanvas().style.cursor = 'default';
     });
 
     // Temporary variables to enable immediate updating of values
@@ -200,35 +228,33 @@ function Landing() {
         div.addEventListener("click", function(){
           setSideBarShow(false);  // turn off sidebar
           const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
-          // Remove all added markers
+          // Remove all added markers (except user location button)
           if (markers.length > 0){
-            while(markers.length > 0){
-              markers[0].parentNode.removeChild(markers[0]);
+            for (let i=0; i<markers.length; i++){
+              if (!markers[i].className.includes("location")){
+                markers[i].parentNode.removeChild(markers[i]);
+              }
             }
           }
-          // Add marker iff there are no markers
-          if (markers.length == 0){
-            const marker = new mapboxgl.Marker({
-                draggable: "true",
-                scale: 0.8,
-                color: "#FF0000"
-              }).setLngLat([newLng, newLat]).addTo(map);
-            
-            
-            function onDragEnd() {
-              const lngLat = marker.getLngLat();
-              console.log(marker.getLngLat());
-              const latLng = marker.getLngLat();
-              setUserMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
-            }
-            
-            marker.on('dragend', onDragEnd);
-            
-            setUserMarker(true);
+          // Add marker
+          const marker = new mapboxgl.Marker({
+              draggable: "true",
+              scale: 0.8,
+              color: "#FF0000"
+            }).setLngLat([newLng, newLat]).addTo(map);
+          
+          
+          function onDragEnd() {
+            const lngLat = marker.getLngLat();
+            setUserMarkerLngLat(lngLat.lng.toString() + "," + lngLat.lat.toString());
+          }
+          
+          marker.on('dragend', onDragEnd);
+          
+          setUserMarker(true);
 
-            const latLng = marker.getLngLat();
-            setUserMarkerLngLat(latLng.lng.toString() + "," + latLng.lat.toString());
-          }
+          const lngLat = marker.getLngLat();
+          setUserMarkerLngLat(lngLat.lng.toString() + "," + lngLat.lat.toString());
         });
         return div;
       }

@@ -5,7 +5,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 
 function MarkerSideBar(props){
     
-    const directions = "https://www.google.com/maps/dir//"+ props.latLng;
+    const directions = "https://www.google.com/maps/dir//"+ props.latLng + "/@" + props.latLng + ",16.75z";
 
     var placement = "start";
     if (/Android|iPhone/i.test(navigator.userAgent)) {
@@ -14,10 +14,12 @@ function MarkerSideBar(props){
 
     function hide(){
         const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
-          // Remove all added markers
-          if (markers.length > 0){
-            while(markers.length > 0){
-              markers[0].parentNode.removeChild(markers[0]);
+        // Remove all added markers (except user location button)
+        if (markers.length > 0){
+            for (let i=0; i<markers.length; i++){
+                if (!markers[i].className.includes("location")){
+                markers[i].parentNode.removeChild(markers[i]);
+                }
             }
         }
         props.onHide();
@@ -35,6 +37,7 @@ function MarkerSideBar(props){
                 <a href={directions} target="_blank"><Button>Get Directions</Button></a>
             </Offcanvas.Body>
         </Offcanvas>
+        
         </>
     );
 }
