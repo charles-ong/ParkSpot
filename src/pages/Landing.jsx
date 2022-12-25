@@ -33,6 +33,7 @@ function Landing() {
   const [enableTour, setEnableTour] = useState(false);
   const steps = [
     {
+      title: "Hello! 👋",
       element: '.body',
       intro: 'Welcome to Parkspot!',
       position: 'right',
@@ -72,6 +73,10 @@ function Landing() {
       intro: 'This is the search bar. You can search for any place within Western Australia',
     },
   ];
+
+  const options = {
+    showStepNumbers: true
+  }
 
   const onExit = () => {};
 
@@ -130,7 +135,8 @@ function Landing() {
 
       const marker = new mapboxgl.Marker({
         scale: 0.8,
-        color: "#FF0000"
+        color: "#FF0000",
+        draggable: false
       }).setLngLat(feature.geometry.coordinates).addTo(map);
       
       const coordinates = feature.geometry.coordinates;
@@ -146,19 +152,14 @@ function Landing() {
     });
 
     // Change cursor on hover
-    map.on("mouseenter ", "free-parking-perth", (event) => {
-      // const features = map.queryRenderedFeatures(event.point, {
-      //   layers: ["free-parking-perth", "heatmap"]
-      // });
-      // if (!features.length) {
-      //   return;
-      // }
-      // const feature = features[0];
-      map.getCanvas().style.cursor = 'pointer';
-    });
+    map.on('load', function() {
+      map.on("mouseenter", ["free-parking-perth", "heatmap"], (event) => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
 
-    map.on('mouseleave', "free-parking-perth", (event) => {
-      map.getCanvas().style.cursor = 'default';
+      map.on('mouseleave', ["free-parking-perth", "heatmap"], (event) => {
+        map.getCanvas().style.cursor = 'default';
+      });
     });
 
     // Temporary variables to enable immediate updating of values
@@ -179,8 +180,9 @@ function Landing() {
     // Fullscreen control
     map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
-    // Add navigation control (the +/- zoom buttons)
+    // Add navigation control (the +/- zoom buttons, compass and compass visualisation on change of pitch)
     map.addControl(new mapboxgl.NavigationControl({
+        showZoom: true,
         showCompass: true,
         visualizePitch: true
       }), 'top-right'
@@ -267,8 +269,7 @@ function Landing() {
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       countries: 'au',
-      bbox: [111.42, -35.93, 128.98, -12.91],
-      collapsed: true
+      bbox: [111.42, -35.93, 128.98, -12.91]
     });
     map.addControl(geocoder, "top-left")
 
@@ -302,6 +303,7 @@ function Landing() {
           onExit = {onExit}
           onBeforeExit = {()=>setEnableTour(false)}
           onComplete = {()=>setEnableTour(false)}
+          options = {options}
         />
 
       </div>
