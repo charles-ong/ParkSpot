@@ -19,7 +19,7 @@
       }
     ],
     "id": "/",
-    "start_url": "/",
+    "start_url": "https://parkspotperth.netlify.app/",
     "background_color": "#3367D6",
     "display": "standalone",
     "scope": "/",
