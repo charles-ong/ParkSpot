@@ -29,48 +29,49 @@ function Landing() {
   const [userMarker, setUserMarker] = useState(false);
   const [markerDetails, setMarkerDetails] = useState({});
   const [sideBarShow, setSideBarShow] = useState(false);
-  
   const [enableTour, setEnableTour] = useState(false);
+
   const steps = [
     {
-      title: "Hello! 👋",
+      title: "Hello 👋",
       element: '.body',
       intro: 'Welcome to Parkspot!',
       position: 'right',
       tooltipClass: 'myTooltipClass',
       highlightClass: 'myHighlightClass',
     },
+
+    {
+      element: '.mapboxgl-ctrl-geocoder',
+      intro: 'This is the search bar. You can search for any place within Western Australia',
+    },
+
     {
       element: '.mapboxgl-ctrl-fullscreen',
       intro: 'Click this button to enter or exit fullscreen.',
     },
     {
-      element: '.mapboxgl-ctrl-zoom-in',
-      intro: 'Click this button or pinch outwards to zoom in.',
-    },
-    {
-      element: '.mapboxgl-ctrl-zoom-out',
-      intro: 'Click this button or pinch inwards to zoom out.',
-    },
-    {
-      element: '.mapboxgl-ctrl-compass',
-      intro: 'Click this button to reset the bearing to face north.',
+      element: '.navigation-ctrl',
+      intro: 'Click the + and - buttons to zoom in and out and the compass button to reset the bearing.',
     },
     {
       element: '.mapboxgl-ctrl-geolocate',
       intro: 'Click this button to view your current location.',
     },
     {
-      element: '.home-button',
-      intro: 'Click this button to reset the map view back to Perth.',
-    },
-    {
       element: '.add-marker-button',
-      intro: "Found a free parking spot that's not on the map? Click this to help us add it to the map.",
+      intro: "Found a free parking spot that's not on the map? Click here to help us add it to the map.",
     },
+
     {
-      element: '.mapboxgl-ctrl-geocoder',
-      intro: 'This is the search bar. You can search for any place within Western Australia',
+      element: '.home-button',
+      // intro: 'Click this button to reset the map view back to Perth.',
+      intro: 'Click this button to add this site to your homescreen.'
+    },
+    
+    {
+      element: '.help-button',
+      intro: "And that's it! If you need help, click this button to start the tour again. Happy parking! 🚗",
     },
   ];
 
@@ -80,8 +81,18 @@ function Landing() {
 
   const onExit = () => {};
 
-  useEffect(() => {
+  // This variable will save the event for later use.
+  let deferredPrompt;
 
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevents the default mini-infobar or install dialog from appearing on mobile
+    e.preventDefault();
+    // Save the event because you'll need to trigger it later.
+    deferredPrompt = e;
+  });
+
+  useEffect(() => {
+    // Map Load
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/charlesong/clajdaze2000e14qpshcv9szq",
@@ -101,9 +112,8 @@ function Landing() {
       map.panTo(feature.geometry.coordinates, {zoom: 13});
     })
 
-    // Popups on marker click
+    // Parking Markers
     map.on('click', (event) => {
-      // If the user clicked on one of your markers, get its information.
       const features = map.queryRenderedFeatures(event.point, {
         layers: ["free-parking-perth"]
       });
@@ -200,25 +210,6 @@ function Landing() {
         showUserHeading: true,
       }), 'top-right'
     );
-    
-    // Home Position for Home Button (Perth)
-    const homePosition = {
-      center: [115.8613, -31.9523],
-    };
-    class HomeButton {
-      onAdd(map) {
-        const div = document.createElement("div");
-        div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
-        div.innerHTML = `<button class="home-button">
-          <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="font-size: 20px;"><title>Reset map</title><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
-          </button>`;
-        div.addEventListener("contextmenu", (e) => e.preventDefault());
-        div.addEventListener("click", () => map.flyTo(homePosition));
-        return div;
-      }
-      onRemove(map) {}
-    }
-    map.addControl(new HomeButton());
 
     // Adding Markers Control
     class AddMarkerButton {
@@ -264,6 +255,58 @@ function Landing() {
     }
     map.addControl(new AddMarkerButton());
 
+    // // Home Position for Home Button (Perth)
+    // const homePosition = {
+    //   center: [115.8613, -31.9523],
+    // };
+    class HomeButton {
+      onAdd(map) {
+        const div = document.createElement("div");
+        div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+        div.innerHTML = `<button class="home-button">
+          <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="font-size: 20px;"><title>Reset map</title><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+          </button>`;
+        div.addEventListener("contextmenu", (e) => e.preventDefault());
+        // div.addEventListener("click", () => map.flyTo(homePosition));
+        div.addEventListener('click', (e) => {
+          deferredPrompt.prompt();
+          // Wait for the user to respond to the prompt
+          deferredPrompt.userChoice
+            .then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+                div.style.display = "none";
+              } 
+              else {
+                console.log('User dismissed the A2HS prompt');
+                // div.style.display = "none";
+              }
+              // deferredPrompt = null;
+            });
+          });
+        return div;
+      }
+      onRemove(map) {}
+    }
+    map.addControl(new HomeButton());
+
+    class HelpButton {
+      onAdd(map) {
+        const div = document.createElement("div");
+        div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
+        div.innerHTML = `<button class="help-button">
+          <svg xmlns="http://www.w3.org/2000/svg" idth="24px" height="24px" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16"><title>Information</title>
+          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+          </svg>
+          </button>`;
+        div.addEventListener("contextmenu", (e) => e.preventDefault());
+        div.addEventListener("click", () => setEnableTour(true));
+        return div;
+      }
+      onRemove(map) {}
+    }
+    map.addControl(new HelpButton());
+
     // Search Box (Mapbox Search JS)
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -272,6 +315,10 @@ function Landing() {
       bbox: [111.42, -35.93, 128.98, -12.91]
     });
     map.addControl(geocoder, "top-left")
+
+    // Change the classname of parent div of the navigation buttons
+    const navcontrols = document.getElementsByClassName("mapboxgl-ctrl-zoom-out");
+    navcontrols[0].parentNode.className = "navigation-ctrl mapboxgl-ctrl mapboxgl-ctrl-group";
 
     // Enable the product tour after map has been loaded
     setEnableTour(true);
@@ -301,8 +348,8 @@ function Landing() {
           steps = {steps}
           initialStep = {0}
           onExit = {onExit}
-          onBeforeExit = {()=>setEnableTour(false)}
-          onComplete = {()=>setEnableTour(false)}
+          onBeforeExit = {()=> setEnableTour(false)}
+          onComplete = {()=> setEnableTour(false)}
           options = {options}
         />
 

@@ -1,0 +1,27 @@
+{
+    "short_name": "ParkSpot",
+    "name": "ParkSpot Perth",
+    "icons": [
+      {
+        "src": "/src/assets/logo-no-background.svg",
+        "type": "image/svg+xml",
+        "sizes": "512x512"
+      },
+      {
+        "src": "/src/assets/logo-no-background192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/src/assets/logo-no-background512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "id": "http://localhost:3000/",
+    "start_url": "http://localhost:3000/",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#3367D6"
+  }
