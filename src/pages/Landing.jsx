@@ -75,11 +75,25 @@ function Landing() {
     },
   ];
 
+  if (/Android|iPhone/i.test(navigator.userAgent)) {
+    steps[6] = steps[7];
+    steps.pop();
+  }
+
   const options = {
     showStepNumbers: true
   }
 
   const onExit = () => {};
+
+  // For installing application (only works on desktop atm)
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevents the default mini-infobar or install dialog from appearing on mobile
+    e.preventDefault();
+    // Save the event because you'll need to trigger it later.
+    deferredPrompt = e;
+  });
 
   useEffect(() => {
     // Map Load
@@ -258,16 +272,6 @@ function Landing() {
           </button>`;
         div.addEventListener("contextmenu", (e) => e.preventDefault());
         // div.addEventListener("click", () => map.flyTo(homePosition));
-        // This variable will save the event for later use.
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-          // Prevents the default mini-infobar or install dialog from appearing on mobile
-          e.preventDefault();
-          // Save the event because you'll need to trigger it later.
-          deferredPrompt = e;
-          console.log("1");
-          console.log(deferredPrompt);
-        });
         div.addEventListener('click', (e) => {
           deferredPrompt.prompt();
           // Wait for the user to respond to the prompt
@@ -288,7 +292,9 @@ function Landing() {
       }
       onRemove(map) {}
     }
-    map.addControl(new HomeButton());
+    if (!/Android|iPhone/i.test(navigator.userAgent)) {
+      map.addControl(new HomeButton());
+    }
 
     class HelpButton {
       onAdd(map) {
