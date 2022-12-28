@@ -24,6 +24,7 @@ function Landing() {
   const [lng, setLng] = useState(115.8613);
   const [lat, setLat] = useState(-31.9523);
   const [zoom, setZoom] = useState(9);
+  const [prevZoom, setPrevZoom] = useState(9);
   const [userMarkerLngLat, setUserMarkerLngLat] = useState(null);
   const [markerLatLng, setMarkerLatLng] = useState(null);
   const [userMarker, setUserMarker] = useState(false);
@@ -75,10 +76,10 @@ function Landing() {
     },
   ];
 
-  if (/Android|iPhone/i.test(navigator.userAgent)) {
-    steps[6] = steps[7];
-    steps.pop();
-  }
+  // if (/Android|iPhone/i.test(navigator.userAgent)) { // test if it works on other devices
+  //   steps[6] = steps[7];
+  //   steps.pop();
+  // }
 
   const options = {
     showStepNumbers: true
@@ -107,78 +108,6 @@ function Landing() {
       zoom: zoom
     });
 
-    // Heatmap
-    map.on('click',(event) => {
-      const features = map.queryRenderedFeatures(event.point, {
-        layers: ["heatmap"]
-      });
-      if (!features.length) {
-        return;
-      }
-      const feature = features[0];
-      map.panTo(feature.geometry.coordinates, {zoom: 13});
-    })
-
-    // Parking Markers
-    map.on('click', (event) => {
-      const features = map.queryRenderedFeatures(event.point, {
-        layers: ["free-parking-perth"]
-      });
-      if (!features.length) {
-        return;
-      }
-      const feature = features[0];
-      
-      // const popup = new mapboxgl.Popup({ offset: [0, -15] })
-      //   .setLngLat(feature.geometry.coordinates)
-      //   .setHTML(
-      //     `<h3>${feature.properties.Name}</h3><p>${feature.properties.Suburb}, ${feature.properties.City}</p>`
-      //   )
-      //   .addTo(map);
-
-      map.panTo(feature.geometry.coordinates, {zoom: 17});
-
-      const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
-      // Remove all added markers (except user location button)
-      if (markers.length > 0){
-        for (let i=0; i<markers.length; i++){
-          if (!markers[i].className.includes("location")){
-            markers[i].parentNode.removeChild(markers[i]);
-          }
-        }
-      }
-
-      setUserMarker(false);
-
-      const marker = new mapboxgl.Marker({
-        scale: 0.8,
-        color: "#FF0000",
-        draggable: false
-      }).setLngLat(feature.geometry.coordinates).addTo(map);
-      
-      const coordinates = feature.geometry.coordinates;
-      setMarkerLatLng(coordinates[1] + "," + coordinates[0]);
-      
-      const details = {
-        Name: feature.properties.Name,
-        Suburb: feature.properties.Suburb,
-        City: feature.properties.City
-      };
-      setMarkerDetails(details);
-      setSideBarShow(true);
-    });
-
-    // Change cursor on hover
-    map.on('load', function() {
-      map.on("mouseenter", ["free-parking-perth", "heatmap"], (event) => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-
-      map.on('mouseleave', ["free-parking-perth", "heatmap"], (event) => {
-        map.getCanvas().style.cursor = 'default';
-      });
-    });
-
     // Temporary variables to enable immediate updating of values
     var newLng = lng;
     var newLat = lat;
@@ -192,6 +121,83 @@ function Landing() {
       setLng(newLng);
       setLat(newLat);
       setZoom(newZoom);
+    });
+
+    // Heatmap
+    map.on('click',(event) => {
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: ["heatmap"]
+      });
+      if (!features.length) {
+        return;
+      }
+      const feature = features[0];
+      map.panTo(feature.geometry.coordinates, {zoom: parseFloat(newZoom)+2.5});
+    })
+
+    // Parking Markers
+    map.on('click', (event) => {
+      if (newZoom >= 12.20){
+        setPrevZoom(newZoom);   // used for returning to previous zoom after closing sidebar
+
+        const features = map.queryRenderedFeatures(event.point, {
+          layers: ["free-parking-perth"]
+        });
+        if (!features.length) {
+          return;
+        }
+        const feature = features[0];
+        
+        // const popup = new mapboxgl.Popup({ offset: [0, -15] })
+        //   .setLngLat(feature.geometry.coordinates)
+        //   .setHTML(
+        //     `<h3>${feature.properties.Name}</h3><p>${feature.properties.Suburb}, ${feature.properties.City}</p>`
+        //   )
+        //   .addTo(map);
+
+
+        map.panTo(feature.geometry.coordinates, {zoom: 17});
+  
+        const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
+        // Remove all added markers (except user location button)
+        if (markers.length > 0){
+          for (let i=0; i<markers.length; i++){
+            if (!markers[i].className.includes("location")){
+              markers[i].parentNode.removeChild(markers[i]);
+            }
+          }
+        }
+  
+        setUserMarker(false);
+  
+        const marker = new mapboxgl.Marker({
+          scale: 0.8,
+          color: "#FF0000",
+          draggable: false
+        }).setLngLat(feature.geometry.coordinates).addTo(map);
+        
+        const coordinates = feature.geometry.coordinates;
+        setMarkerLatLng(coordinates[1] + "," + coordinates[0]);
+        
+        const details = {
+          Name: feature.properties.Name,
+          Suburb: feature.properties.Suburb,
+          City: feature.properties.City
+        };
+        setMarkerDetails(details);
+        setSideBarShow(true);
+      }
+    });
+
+    // Change cursor on hover
+    map.on('load', function() {
+      map.on("mouseenter", ["free-parking-perth", "heatmap"], (event) => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.on('mouseleave', ["free-parking-perth", "heatmap"], (event) => {
+        map.getCanvas().style.cursor = 'default';
+      });
     });
 
     // Fullscreen control
@@ -295,9 +301,9 @@ function Landing() {
       }
       onRemove(map) {}
     }
-    if (!/Android|iPhone/i.test(navigator.userAgent)) {
-      map.addControl(new HomeButton());
-    }
+    // if (!/Android|iPhone/i.test(navigator.userAgent)) {
+      map.addControl(new HomeButton());   // test if works on other devices
+    // }
 
     class HelpButton {
       onAdd(map) {
