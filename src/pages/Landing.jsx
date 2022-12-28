@@ -96,6 +96,9 @@ function Landing() {
   });
 
   useEffect(() => {
+    // Clears storage on load
+    mapboxgl.clearStorage();
+
     // Map Load
     const map = new mapboxgl.Map({
       container: mapContainer.current,
