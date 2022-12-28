@@ -38,6 +38,6 @@ body {
     margin: 0.5em;
 }
 
-.mapboxgl-ctrl-geocoder--input {
-    max-width: 20%;
+.mapboxgl-ctrl-geocoder {
+    max-width: 80%!important;
 }
