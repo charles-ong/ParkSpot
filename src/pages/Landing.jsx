@@ -89,6 +89,7 @@ function Landing() {
     e.preventDefault();
     // Save the event because you'll need to trigger it later.
     deferredPrompt = e;
+    console.log(deferredPrompt);
   });
 
   useEffect(() => {
