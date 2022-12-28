@@ -258,6 +258,16 @@ function Landing() {
           </button>`;
         div.addEventListener("contextmenu", (e) => e.preventDefault());
         // div.addEventListener("click", () => map.flyTo(homePosition));
+        // This variable will save the event for later use.
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+          // Prevents the default mini-infobar or install dialog from appearing on mobile
+          e.preventDefault();
+          // Save the event because you'll need to trigger it later.
+          deferredPrompt = e;
+          console.log("1");
+          console.log(deferredPrompt);
+        });
         div.addEventListener('click', (e) => {
           deferredPrompt.prompt();
           // Wait for the user to respond to the prompt
