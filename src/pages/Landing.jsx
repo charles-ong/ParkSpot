@@ -66,7 +66,7 @@ function Landing() {
     {
       element: '.home-button',
       // intro: 'Click this button to reset the map view back to Perth.',
-      intro: 'Click this button to add this site to your homescreen.'
+      intro: 'Click this button to install this site as an application.'
     },
     
     {
@@ -268,7 +268,7 @@ function Landing() {
         const div = document.createElement("div");
         div.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
         div.innerHTML = `<button class="home-button">
-          <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="font-size: 20px;"><title>Reset map</title><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+          <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="font-size: 20px;"><title>Install App</title><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
           </button>`;
         div.addEventListener("contextmenu", (e) => e.preventDefault());
         // div.addEventListener("click", () => map.flyTo(homePosition));

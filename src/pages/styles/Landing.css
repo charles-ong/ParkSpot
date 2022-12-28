@@ -37,3 +37,7 @@ body {
 .user-submission-buttons button{
     margin: 0.5em;
 }
+
+.mapboxgl-ctrl-geocoder--input {
+    max-width: 20%;
+}
