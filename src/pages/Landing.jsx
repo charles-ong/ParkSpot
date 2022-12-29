@@ -24,7 +24,6 @@ function Landing() {
   const [lng, setLng] = useState(115.8613);
   const [lat, setLat] = useState(-31.9523);
   const [zoom, setZoom] = useState(9);
-  const [prevZoom, setPrevZoom] = useState(9);
   const [userMarkerLngLat, setUserMarkerLngLat] = useState(null);
   const [markerLatLng, setMarkerLatLng] = useState(null);
   const [userMarker, setUserMarker] = useState(false);
@@ -138,8 +137,6 @@ function Landing() {
     // Parking Markers
     map.on('click', (event) => {
       if (newZoom >= 12.20){
-        setPrevZoom(newZoom);   // used for returning to previous zoom after closing sidebar
-
         const features = map.queryRenderedFeatures(event.point, {
           layers: ["free-parking-perth"]
         });
@@ -156,7 +153,7 @@ function Landing() {
         //   .addTo(map);
 
 
-        map.panTo(feature.geometry.coordinates, {zoom: 17});
+        map.panTo(feature.geometry.coordinates, {zoom: parseFloat(newZoom)+2});
   
         const markers = document.getElementsByClassName("mapboxgl-marker")    // all added markers in DOM
         // Remove all added markers (except user location button)
@@ -167,7 +164,6 @@ function Landing() {
             }
           }
         }
-  
         setUserMarker(false);
   
         const marker = new mapboxgl.Marker({
@@ -182,7 +178,8 @@ function Landing() {
         const details = {
           Name: feature.properties.Name,
           Suburb: feature.properties.Suburb,
-          City: feature.properties.City
+          City: feature.properties.City,
+          Price: feature.properties.Price
         };
         setMarkerDetails(details);
         setSideBarShow(true);
