@@ -45,11 +45,6 @@ function Landing() {
       element: '.mapboxgl-ctrl-geocoder',
       intro: 'This is the search bar. You can search for any place within Western Australia',
     },
-
-    {
-      element: '.mapboxgl-ctrl-fullscreen',
-      intro: 'Click this button to enter or exit fullscreen.',
-    },
     {
       element: '.navigation-ctrl',
       intro: 'Click the + and - buttons to zoom in and out and the compass button to reset the bearing.',
@@ -196,9 +191,6 @@ function Landing() {
         map.getCanvas().style.cursor = 'default';
       });
     });
-
-    // Fullscreen control
-    map.addControl(new mapboxgl.FullscreenControl(), 'top-right');
 
     // Add navigation control (the +/- zoom buttons, compass and compass visualisation on change of pitch)
     map.addControl(new mapboxgl.NavigationControl({

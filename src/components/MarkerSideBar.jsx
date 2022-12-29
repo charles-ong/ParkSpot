@@ -15,11 +15,11 @@ function MarkerSideBar(props){
             setPricesTable(
                 <Table striped size="sm">
                     {/* note: "index" does not work */}
-                    {prices.map(({index, type, period, rate}) => (
+                    {prices.map(({type, period, rate}) => (
                         <>
                         {type}
                         <tbody>
-                            <tr key={index}>
+                            <tr key={period}>
                                 <td>{period}</td>
                                 <td>{rate}</td>
                             </tr>

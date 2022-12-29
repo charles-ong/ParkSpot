@@ -13,8 +13,6 @@ function UserMarkerSubmission(props){
     const source = "https://api.mapbox.com/styles/v1/charlesong/clajdaze2000e14qpshcv9szq/static/pin-m-circle+ff0000(" + props.lngLat + ")/auto/600x300@2x?attribution=true&logo=false&access_token=pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA";
     const form = useRef();
 
-    const [email, setEmail] = useState(null);
-
     const sendEmail = (e) => {
         e.preventDefault();
         console.log(form.current);
