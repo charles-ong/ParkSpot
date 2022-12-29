@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image'
 import emailjs from 'emailjs-com';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+
+// Components
+// import ReCaptcha from './ReCaptcha';
 
 function UserMarkerSubmission(props){
 
@@ -13,13 +16,6 @@ function UserMarkerSubmission(props){
     const handleClose = () => setShowModal(false);
     const source = "https://api.mapbox.com/styles/v1/charlesong/clajdaze2000e14qpshcv9szq/static/pin-m-circle+ff0000(" + props.lngLat + ")/auto/600x300@2x?attribution=true&logo=false&access_token=pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA";
     const form = useRef();
-    const [token, setToken] = useState();
-    const [refreshReCaptcha, setRefreshReCaptcha] = useState(false);
-
-    const onVerify = ((token) => {
-        setToken(token);
-        console.log("token: " + token); // idk what this looks like
-    });
 
     const sendEmail = (e) => {
         e.preventDefault();
@@ -47,6 +43,28 @@ function UserMarkerSubmission(props){
           }
         props.onHide();
     }
+
+    const ReCaptcha = () => {
+        const { executeRecaptcha } = useGoogleReCaptcha();
+      
+        // Create an event handler so you can call the verification on button click event or form submit
+        const handleReCaptchaVerify = useCallback(async () => {
+          if (!executeRecaptcha) {
+            console.log('Execute recaptcha not yet available');
+            return;
+          }
+      
+          const token = await executeRecaptcha('yourAction');
+          // Do whatever you want with the token
+        }, [executeRecaptcha]);
+      
+        // You can use useEffect to trigger the verification as soon as the component being loaded
+        useEffect(() => {
+          handleReCaptchaVerify();
+        }, [handleReCaptchaVerify]);
+      
+        return <button onClick={handleReCaptchaVerify}>Verify recaptcha</button>;
+    };
 
 
     if (props.show == true){
@@ -79,10 +97,8 @@ function UserMarkerSubmission(props){
                                 </Form.Text>
                             </Form.Group>
                             <Form.Group>
-                                <GoogleReCaptchaProvider
-                                    onVerify={onVerify}
-                                    refreshReCaptcha={refreshReCaptcha}
-                                    reCaptchaKey="6LevzLcjAAAAAPeFELRl31nK2niZHfK6VfXsS6Z4">
+                                <GoogleReCaptchaProvider reCaptchaKey="6LevzLcjAAAAAPeFELRl31nK2niZHfK6VfXsS6Z4">
+                                    <ReCaptcha />
                                 </GoogleReCaptchaProvider>
                             </Form.Group>
                             <Modal.Footer>
