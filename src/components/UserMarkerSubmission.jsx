@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image'
 import emailjs from 'emailjs-com';
-import ReCAPTCHA from 'react-google-recaptcha'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 function UserMarkerSubmission(props){
 
@@ -13,6 +13,13 @@ function UserMarkerSubmission(props){
     const handleClose = () => setShowModal(false);
     const source = "https://api.mapbox.com/styles/v1/charlesong/clajdaze2000e14qpshcv9szq/static/pin-m-circle+ff0000(" + props.lngLat + ")/auto/600x300@2x?attribution=true&logo=false&access_token=pk.eyJ1IjoiY2hhcmxlc29uZyIsImEiOiJjbGFqNnh2bDAwOXZlM3ZycWVkZ3YycnlzIn0.o43APqITPr1TxZFDwtClPA";
     const form = useRef();
+    const [token, setToken] = useState();
+    const [refreshReCaptcha, setRefreshReCaptcha] = useState(false);
+
+    const onVerify = ((token) => {
+        setToken(token);
+        console.log("token: " + token); // idk what this looks like
+    });
 
     const sendEmail = (e) => {
         e.preventDefault();
@@ -23,6 +30,8 @@ function UserMarkerSubmission(props){
           }, (error) => {
               console.log(error.text);
           });
+
+        setRefreshReCaptcha(r => !r);
         handleClose();
     };
 
@@ -39,9 +48,6 @@ function UserMarkerSubmission(props){
         props.onHide();
     }
 
-    function onChange(value) {
-        console.log('Captcha value:', value);
-      }
 
     if (props.show == true){
         return (
@@ -73,10 +79,11 @@ function UserMarkerSubmission(props){
                                 </Form.Text>
                             </Form.Group>
                             <Form.Group>
-                                <ReCAPTCHA
-                                    sitekey="6Ldb9bYjAAAAAO4KPu0Snb0pqUsz7coaqrMY6zjv"
-                                    onChange={onChange}
-                                />
+                                <GoogleReCaptchaProvider
+                                    onVerify={onVerify}
+                                    refreshReCaptcha={refreshReCaptcha}
+                                    reCaptchaKey="6LevzLcjAAAAAPeFELRl31nK2niZHfK6VfXsS6Z4">
+                                </GoogleReCaptchaProvider>
                             </Form.Group>
                             <Modal.Footer>
                                 <Button variant="danger" onClick={handleClose}>
