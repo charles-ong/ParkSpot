@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image'
 import emailjs from 'emailjs-com';
+import ReCAPTCHA from 'react-google-recaptcha'
 
 function UserMarkerSubmission(props){
 
@@ -38,6 +39,10 @@ function UserMarkerSubmission(props){
         props.onHide();
     }
 
+    function onChange(value) {
+        console.log('Captcha value:', value);
+      }
+
     if (props.show == true){
         return (
             <>
@@ -66,6 +71,12 @@ function UserMarkerSubmission(props){
                                 <Form.Text className="text-muted">
                                     We'll never share your email with anyone else.
                                 </Form.Text>
+                            </Form.Group>
+                            <Form.Group>
+                                <ReCAPTCHA
+                                    sitekey="6Ldb9bYjAAAAAO4KPu0Snb0pqUsz7coaqrMY6zjv"
+                                    onChange={onChange}
+                                />
                             </Form.Group>
                             <Modal.Footer>
                                 <Button variant="danger" onClick={handleClose}>
