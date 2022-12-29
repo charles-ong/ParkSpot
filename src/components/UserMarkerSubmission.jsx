@@ -26,8 +26,6 @@ function UserMarkerSubmission(props){
           }, (error) => {
               console.log(error.text);
           });
-
-        setRefreshReCaptcha(r => !r);
         handleClose();
     };
 
@@ -55,6 +53,7 @@ function UserMarkerSubmission(props){
           }
       
           const token = await executeRecaptcha('yourAction');
+          console.log("token: " + token);
           // Do whatever you want with the token
         }, [executeRecaptcha]);
       
@@ -63,7 +62,7 @@ function UserMarkerSubmission(props){
           handleReCaptchaVerify();
         }, [handleReCaptchaVerify]);
       
-        return <button onClick={handleReCaptchaVerify}>Verify recaptcha</button>;
+        return <Button onClick={handleReCaptchaVerify}>Verify recaptcha</Button>;
     };
 
 
