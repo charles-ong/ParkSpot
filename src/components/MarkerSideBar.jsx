@@ -59,11 +59,13 @@ function MarkerSideBar(props){
             <Offcanvas.Title>{props.details.Name}</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                <p>Suburb: {props.details.Suburb}</p>
                 <p>City: {props.details.City}</p>
+                <p>Suburb: {props.details.Suburb}</p>
                 <a href={directions} target="_blank"><Button>Get Directions</Button></a>
                 <p className="mt-3 mb-1">Prices:</p>
                 {pricesTable}
+                <p>Phone: {props.details.Phone}</p>
+                <p>Website: {props.details.Website}</p>
             </Offcanvas.Body>
         </Offcanvas>
         

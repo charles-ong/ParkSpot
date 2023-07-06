@@ -174,7 +174,10 @@ function Landing() {
           Name: feature.properties.Name,
           Suburb: feature.properties.Suburb,
           City: feature.properties.City,
-          Price: feature.properties.Price
+          Price: feature.properties.Price,
+          Phone: feature.properties.Phone,
+          Website: feature.properties.Website
+
         };
         setMarkerDetails(details);
         setSideBarShow(true);
