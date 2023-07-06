@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
 function MarkerSideBar(props){
     
     const directions = "https://www.google.com/maps/dir//"+ props.latLng + "/@" + props.latLng + ",16.75z";
+    const telephone = "tel:" + props.details.Phone;
     const [pricesTable,setPricesTable] = useState(null);
 
     useEffect(() => {
@@ -64,8 +65,8 @@ function MarkerSideBar(props){
                 <a href={directions} target="_blank"><Button>Get Directions</Button></a>
                 <p className="mt-3 mb-1">Prices:</p>
                 {pricesTable}
-                <p>Phone: {props.details.Phone}</p>
-                <p>Website: {props.details.Website}</p>
+                <p>Phone: <a href={telephone}>{props.details.Phone}</a></p>
+                <p>Website: <a href={props.details.Website}>{props.details.Website}</a></p>
             </Offcanvas.Body>
         </Offcanvas>
         
